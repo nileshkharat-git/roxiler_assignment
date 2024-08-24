@@ -37,14 +37,21 @@ app.get("/initialize-database", async (req, res) => {
     });
 });
 
-app.get('/api/products', async (req, res) => {
-  const search = req.query.search;
+app.get('/api/products/:month', async (req, res) => {
+  const saleMonth = Number(req.params.month);
+  const search = req.query.search || "";
   const page = Number(req.query.page) || 1;
   const perPage = 10;
   const skip = (page - 1) * perPage;
   try {
-    let products = await Product.find(search? { $text: { $search:`${search}` } }: {}).skip(skip).limit(perPage).sort({id: 1});
-    return res.status(200).json(products);
+    if (search.length > 0) {
+      const products = await Product.aggregate([{$match:{$text:{$search:search}}},{$addFields:{month:{$month:"$dateOfSale"}}},{$match:{month:saleMonth}}]).skip(skip).limit(perPage).sort({id: 1});
+      return res.status(200).json(products);
+      }
+      else {
+      const products = await Product.aggregate([{$addFields:{month:{$month:"$dateOfSale"}}},{$match:{month:saleMonth}}]).skip(skip).limit(perPage).sort({id: 1});
+      return res.status(200).json(products);
+      }
   } catch (error) {
     return res.status(500).json(error.message);
   }
