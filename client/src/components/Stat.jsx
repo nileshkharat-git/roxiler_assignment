@@ -8,7 +8,6 @@ const Stat = () => {
      .then((response) => response.json())
      .then((data) => {
         setSalesData(data)
-        console.log(salesData[0]);
     });
   }, [selectedMonth]);
 
@@ -27,43 +26,47 @@ const Stat = () => {
     { text: "Dec", value: 12 },
   ];
 
-  return (
-    <div className="my-8">
-        <h2 className="text-2xl font-bold text-gray-900">Statistics</h2>
-        <select className="outline-none focus:outline-none p-2 bg-white rounded-3xl" onChange={(e)=>setSelectedMonth(e.target.value)}>
-        {months.map((month) => (
-          <option key={month.value} value={month.value}>
-            {month.text}
-          </option>
-        ))}
-      </select>
-        <div className="flex flex-wrap gap-4">
-          <div className="w-1/2">
-            <div className="flex items-center justify-between">
-              <p className="text-lg font-medium text-gray-900">
-                Total Sales
-              </p>
-              <p className="text-2xl font-bold text-gray-900">
-                {salesData.totalSale}
-              </p>
-            </div>
-            <div className="flex items-center justify-between">
-              <p className="text-lg font-medium text-gray-900">
-                Sold items
-              </p>
-              <p className="text-2xl font-bold text-gray-900">{salesData.soldItems}</p>
-            </div>
-            <div className="flex items-center justify-between">
-              <p className="text-lg font-medium text-gray-900">
-                Not Sold items
-              </p>
-              <p className="text-2xl font-bold text-gray-900">{salesData.notSoldItems}</p>
+  if(salesData.length > 0){
+    {console.log(salesData);}
+    return (
+      <div className="my-8">
+          <h2 className="text-2xl font-bold text-gray-900">Statistics</h2>
+          <select className="outline-none focus:outline-none p-2 bg-white rounded-3xl" onChange={(e)=>setSelectedMonth(e.target.value)}>
+          {months.map((month) => (
+            <option key={month.value} value={month.value}>
+              {month.text}
+            </option>
+          ))}
+        </select>
+          <div className="flex flex-wrap gap-4">
+            <div className="w-1/2">
+              <div className="flex items-center justify-between">
+                <p className="text-lg font-medium text-gray-900">
+                  Total Sales
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {salesData[0].totalSale}
+                </p>
+              </div>
+              <div className="flex items-center justify-between">
+                <p className="text-lg font-medium text-gray-900">
+                  Sold items
+                </p>
+                <p className="text-2xl font-bold text-gray-900">{salesData[0].soldItems}</p>
+              </div>
+              <div className="flex items-center justify-between">
+                <p className="text-lg font-medium text-gray-900">
+                  Not Sold items
+                </p>
+                <p className="text-2xl font-bold text-gray-900">{salesData[0].notSoldItems}</p>
+              </div>
             </div>
           </div>
-        </div>
-    
-    </div>
-  );
+      
+      </div>
+    );
+  } 
+  return <div>Loading...</div>
 };
 
 export default Stat;
