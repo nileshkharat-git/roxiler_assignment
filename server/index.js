@@ -78,8 +78,43 @@ app.get('/api/products/bar-chart/:month', async (req, res) => {
   const month = Number(req.params.month);
   try {
     const data = await Product.aggregate([{$addFields:{month:{$month:"$dateOfSale"}}},{$match:{month:month}},{$bucket:{groupBy:"$price", boundaries:[0,100,200,300,400,500,600,700,800,900], default:"Greater tham 900", output:{count:{$sum:1}}}},{$sort:{_id:1}}])
-
-    return res.status(200).json(data)
+    const prepareData = []
+    data.map((item)=>{
+      let obj = {"label":null,"value":null}
+      if (0 >= item._id && item._id <= 100) {
+        obj.label = "0-100";
+        obj.value = item.count;
+      } else if ((101 >= item._id) && (item._id <= 200)) {
+        obj.label = "101-200";
+        obj.value = item.count;
+      } else if ((201 >= item._id) && (item._id <= 300)) {
+        obj.label = "201-300";
+        obj.value = item.count;
+      } else if ((301 >= item._id) && (item._id <= 400)) {
+        obj.label = "301-400";
+        obj.value = item.count;
+      } else if ((401 >= item._id) && (item._id <= 500)) {
+        obj.label = "401-500";
+        obj.value = item.count;
+      } else if ((501 >= item._id) && (item._id <= 600)) {
+        obj.label = "501-600";
+        obj.value = item.count;
+      } else if ((601 >= item._id) && (item._id <= 700)) {
+        obj.label = "601-700";
+        obj.value = item.count;
+      } else if ((701 >= item._id) && (item._id <= 800)) {
+        obj.label = "701-800";
+        obj.value = item.count;
+      } else if ((801 >= item._id) && (item._id <= 900)) {
+        obj.label = "801-900";
+        obj.value = item.count;
+      } else if (900 >= item._id) {
+        obj.label = "Greater than 900";
+        obj.value = item.count;
+      }
+      prepareData.push(obj);
+    })
+    return res.status(200).json(prepareData);
 
   } catch (error) {
     return res.status(500).json(error.message)

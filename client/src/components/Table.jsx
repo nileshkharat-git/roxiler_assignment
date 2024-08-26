@@ -74,8 +74,8 @@ const Table = ({month}) => {
             </tr>
           </thead>
           <tbody className="text-blue-gray-900">
-            {products.map((product) => (
-              <tr className="border-b border-blue-gray-200">
+            {products.map((product, key) => (
+              <tr className="border-b border-blue-gray-200" key={key}>
                 <td className="py-3 px-4">{product.id}</td>
                 <td className="py-3 px-4">{product.title}</td>
                 <td className="py-3 px-4 "><p>{isReadMore ? product.description.slice(0,60):product.description} <span className="font-bold text-blue-500" onClick={()=>setIsReadMore(!isReadMore)}>{isReadMore?"...read more":"Show less"}</span></p></td>
